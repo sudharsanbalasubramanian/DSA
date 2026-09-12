@@ -6,7 +6,7 @@ using System.Xml.Linq;
 namespace DSA.Graph.DFS;
 internal class _133_Clone_Graph
 {
-    private Dictionary<Node, Node> _map = [];
+    private readonly Dictionary<Node, Node> _map = [];
     public Node CloneGraph(Node node)
     {
         if (node is null)
@@ -45,13 +45,13 @@ internal class _133_Clone_Graph
         public Node()
         {
             val = 0;
-            neighbors = new List<Node>();
+            neighbors = [];
         }
 
         public Node(int _val)
         {
             val = _val;
-            neighbors = new List<Node>();
+            neighbors = [];
         }
 
         public Node(int _val, List<Node> _neighbors)
