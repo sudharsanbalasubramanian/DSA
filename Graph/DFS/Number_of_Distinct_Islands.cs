@@ -6,8 +6,8 @@ namespace DSA.Graph.DFS;
 
 public class Number_of_Distinct_Islands
 {
-    private int[] _rowDir = [-1, 0, 1, 0];
-    private int[] _colDir = [0, 1, 0, -1];
+    private readonly int[] _rowDir = [-1, 0, 1, 0];
+    private readonly int[] _colDir = [0, 1, 0, -1];
     public int NumDistinctIslands(int[][] grid)
     {
         int m = grid.Length;
@@ -28,7 +28,7 @@ public class Number_of_Distinct_Islands
             {
                 if (grid[row][col] == 1 && !visited[row][col])
                 {
-                    List<(int row, int col)> shape = new();
+                    List<(int row, int col)> shape = [];
 
                     DFS(
                         grid,
