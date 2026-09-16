@@ -1,4 +1,4 @@
-﻿namespace DSA.Graph.BFS;
+﻿namespace DSA.Graph.TopologicalSort;
 
 internal class _210_Course_Schedule_II
 {
