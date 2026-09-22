@@ -10,66 +10,52 @@ internal class _721_Accounts_Merge
     {
         int n = accounts.Count;
 
-        UnionFind unionFind = new UnionFind(n);
+        var uf = new UnionFind(n);
+        var emailToAccount = new Dictionary<string, int>();
 
-        // email -> account index
-        Dictionary<string, int> map = new();
-
-        // Step 1: Union accounts having common emails
-        for (int i = 0; i < n; i++)
+        // 1. Connect accounts sharing the same email
+        for (int account = 0; account < n; account++)
         {
-            for (int j = 1; j < accounts[i].Count; j++)
+            for (int j = 1; j < accounts[account].Count; j++)
             {
-                string email = accounts[i][j];
+                string email = accounts[account][j];
 
-                if (map.TryGetValue(email, out int previousIndex))
+                if (!emailToAccount.TryAdd(email, account))
                 {
-                    unionFind.Union(previousIndex, i);
-                }
-                else
-                {
-                    map[email] = i;
+                    uf.Union(account, emailToAccount[email]);
                 }
             }
         }
 
-        // root account -> emails
-        Dictionary<int, List<string>> groups = new();
+        // 2. Group emails by their root account
+        var rootToEmails = new Dictionary<int, List<string>>();
 
-        // Step 2: Put every email under its final root
-        foreach (var entry in map)
+        foreach (var (email, account) in emailToAccount)
         {
-            string email = entry.Key;
-            int accountIndex = entry.Value;
+            int root = uf.Find(account);
 
-            int root = unionFind.Find(accountIndex);
-
-            if (!groups.ContainsKey(root))
+            if (!rootToEmails.TryGetValue(root, out var emails))
             {
-                groups[root] = [];
+                emails = [];
+                rootToEmails[root] = emails;
             }
 
-            groups[root].Add(email);
+            emails.Add(email);
         }
 
-        // Step 3: Sort emails and build answer
-        List<IList<string>> result = [];
+        // 3. Build merged accounts
+        var result = new List<IList<string>>();
 
-        foreach (var entry in groups)
+        foreach (var (root, emails) in rootToEmails)
         {
-            int root = entry.Key;
-            List<string> emails = entry.Value;
-
             emails.Sort(StringComparer.Ordinal);
 
-            List<string> mergedAccount = new();
+            var mergedAccount = new List<string>(emails.Count + 1)
+            {
+                accounts[root][0]
+            };
 
-            // Name
-            mergedAccount.Add(accounts[root][0]);
-
-            // Emails
             mergedAccount.AddRange(emails);
-
             result.Add(mergedAccount);
         }
 
