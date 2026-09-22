@@ -21,7 +21,7 @@ public class UnionFind
         }
     }
 
-    private int Find(int x)
+    public int Find(int x)
     {
         if (parent[x] == x)
         {
